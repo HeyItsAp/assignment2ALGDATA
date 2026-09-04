@@ -29,6 +29,9 @@ double Method2(double x, int n){
 	if (n == 1){
 		return x;
 	} 
+	if (n == 0){
+		return 1;
+	}
 
 	double new_x = x*x;
 	double new_n = (n-1)/2;

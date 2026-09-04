@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <math.h>
 
-float Method1(float x, float n);
-float Method2(float x, float n);
-float Method3(float x, int n);
+double Method1(double x, double n);
+double Method2(double x, double n);
+double Method3(double x, int n);
 
 
 int main(){
@@ -18,25 +18,26 @@ int main(){
 }
 
 
-float Method1(float x, float n){
+double Method1(double x, double n){
 	if (n = 1){
 		return x;
 	} else {
 		return x * Method1(x, n-1);
 	}
 }
-float Method2(float x, float n){
+double Method2(double x, double n){
 	if (n = 1){
 		return x;
 	} 
 
 	if (n & 1.0){
-		float new_x = x*x;
-		float new_n = (n-1)/2;
+		double new_x = x*x;
+		double new_n = (n-1)/2;
 		return x*Method2(new_x,new_n);
 	}
 }
-float Method3(float x, int n){
+
+double Method3(double x, int n){
 	return pow(x, n);
 }
 

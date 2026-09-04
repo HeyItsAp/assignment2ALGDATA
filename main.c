@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
 double Method1(double x, int n);
 double Method2(double x, int n);
@@ -9,11 +10,40 @@ double Method3(double x, int n);
 
 
 int main(){
-	float x = 5.0;
-	int exponent = 11;
-	printf("Method1: %lf\n", Method1(x, exponent));
-	printf("Method2: %lf\n", Method2(x, exponent));
-	printf("Method3: %lf\n", Method3(x, exponent));
+
+	double x = 1.03;
+	// Different n sizes and test it
+	int n_array[] = {2500, 5000, 10000, 20000, 40000};
+	size_t lengthOfSizes = sizeof(n_array) / sizeof(n_array[0]);
+
+    	for (int s = 0; s < lengthOfSizes; s++) {
+        	int n = n_array[s];
+        	printf("===== n = %d =====\n", n);
+
+			// Method 1
+        	clock_t start = clock();
+			Method1(x, n);
+        	clock_t end = clock();
+
+        	double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+        	printf("Method 1; n = %d, time = %f seconds\n", n, seconds);
+
+			// Method 2
+			start = clock();
+			Method2(x, n);
+        	end = clock();
+
+        	double seconds2 = (double)(end - start) / CLOCKS_PER_SEC;
+        	printf("Method 2; n = %d, time = %f seconds\n", n, seconds2);
+        	
+			// Method 3
+			start = clock();
+			Method3(x, n);
+        	end = clock();
+
+        	double seconds3 = (double)(end - start) / CLOCKS_PER_SEC;
+        	printf("Method 3; n = %d, time = %f seconds\n", n, seconds3);
+    	}
 
 }
 

@@ -26,18 +26,20 @@ double Method1(double x, int n){
 	}
 }
 double Method2(double x, int n){
-	if (n == 1){
-		return x;
-	} 
 	if (n == 0){
 		return 1;
 	}
+	if (n == 1){
+		return x;
+	} 
+
 
 	double new_x = x*x;
-	double new_n = (n-1)/2;
 	if (n & 1){
+		int new_n = (n-1)/2;
 		return x*Method2(new_x,new_n);
 	} else {
+		int new_n = n/2;
 		return Method2(new_x,new_n);
 	}
 }

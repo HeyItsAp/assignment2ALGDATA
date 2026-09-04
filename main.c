@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <math.h>
 
-double Method1(double x, double n);
-double Method2(double x, double n);
+double Method1(double x, int n);
+double Method2(double x, int n);
 double Method3(double x, int n);
 
 
@@ -18,14 +18,14 @@ int main(){
 }
 
 
-double Method1(double x, double n){
+double Method1(double x, int n){
 	if (n = 1){
 		return x;
 	} else {
 		return x * Method1(x, n-1);
 	}
 }
-double Method2(double x, double n){
+double Method2(double x, int n){
 	if (n = 1){
 		return x;
 	} 

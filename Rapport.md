@@ -1,3 +1,45 @@
+```c
+	double x = 1.003;
+	// Different n sizes and test it
+	int n_array[] = {2500, 5000, 10000, 20000, 40000, 80000};
+	size_t lengthOfSizes = sizeof(n_array) / sizeof(n_array[0]);
+
+    	for (int s = 0; s < lengthOfSizes; s++) {
+        	int n = n_array[s];
+        	int trials = 50000;
+
+        	printf("===== n = %d =====\n", n);
+
+			// Method 1
+			clock_t start = clock();
+			for (int i = 0; i < trials; i++) {
+			    Method1(x, n);
+			}
+			clock_t end = clock();
+			double avg_time = ((double)(end - start) / CLOCKS_PER_SEC) / trials;
+			printf("Method 1; n = %d, time = %.12f seconds\n", n, avg_time);
+
+
+			// Method 2
+			start = clock();
+     		for (int i = 0; i < trials; i++) {
+    			Method2(x, n);
+    		}
+    		end = clock();
+    		avg_time = ((double)(end - start) / CLOCKS_PER_SEC) / trials;
+    		printf("Method 2; n = %d, time = %.12f seconds\n", n, avg_time);
+
+			// Method 3
+			start = clock();
+     		for (int i = 0; i < trials; i++) {
+    			Method3(x, n);
+    		}
+    		end = clock();
+    		avg_time = ((double)(end - start) / CLOCKS_PER_SEC) / trials;
+    		printf("Method 3; n = %d, time = %.12f seconds\n", n, avg_time);
+    	}
+```
+
 # Analyse av Methodene
 
 ## Metode 1
@@ -34,7 +76,7 @@ $T(n) = O(n)$
 	}
 	if (n == 1){
 		return x;
-	} 
+	}
 
 
 	double new_x = x*x;
@@ -53,7 +95,7 @@ $T(n) = T(n/2) + c$
 
 Når vi utvider den finner vi ut at n deles med to $k$ antall ganger:
 
-$T(n) = T(n/2)+c = T(n/4)+2c = T(n/8)+3c+...$ 
+$T(n) = T(n/2)+c = T(n/4)+2c = T(n/8)+3c+...$
 
 $n/2^k$
 
@@ -66,11 +108,45 @@ T(n) = T(1) + k*c = O(log(n))$
 
 ## Metode 3
 
+```C
+double Method3(double x, int n){
+	return pow(x,n);
+}
+```
+
 Dette metoden er en innebygd funksjon og bruker bare et call uansett av datamengde. Tidskomplekstitet blir bare
 
 $O(1)$
 
 # Testing
+
+Vanlig tidstesting gjennom å starte klokka, kjøre funksjonen og til slutt stoppe klokka, går for altfor fort. Derfor kjører vi flere iterasjoner av funksjonen deler totale tiden med antall iterasjoner for å få gjennomsnittlig tid. See koden under for å få bedre forståelse:
+
+```C
+double x = 1.003;
+// Different n sizes and test it
+int n_array[] = {2500, 5000, 10000, 20000, 40000, 80000};
+size_t lengthOfSizes = sizeof(n_array) / sizeof(n_array[0]);
+
+    for (int s = 0; s < lengthOfSizes; s++) {
+        int n = n_array[s];
+        int trials = 50000;
+
+        printf("===== n = %d =====\n", n);
+
+        // Method 1
+        clock_t start = clock();
+        for (int i = 0; i < trials; i++) {
+            Method1(x, n);
+        }
+        clock_t end = clock();
+        double avg_time = ((double)(end - start) / CLOCKS_PER_SEC) / trials;
+        printf("Method 1; n = %d, time = %.12f seconds\n", n, avg_time);
+
+
+        // Method 2 og osv...
+    }
+```
 
 ```Shell
 ===== n = 2500 =====
@@ -94,9 +170,11 @@ Method 1; n = 40000, time = 0.000546900000 seconds
 Method 2; n = 40000, time = 0.000000060000 seconds
 Method 3; n = 40000, time = 0.000000020000 seconds
 ```
+
 ## Tolkning
+
 Ved metode 1 ser vi klar fordobling av tid hver gang datamengden dobles. Dette stemmer ved analysen av tidskompleksitet, nemlig $O(n)$
 
 Ved metode 3 ser vi også en konstant tidsbruk uavhengig av datamengden. Dette stemmer siden metode bare gjør et direkte kall til biblioteket og bruker ikke rekursjon.
 
-Ved metode 2 ser vi noe interessant. Vi ser en liten økning mellom 10000 og 20000. Dette kan være på grunn av hvordan håndterer rekursjon. Siden metoden deler eksponent i to og stopper rekursjonen ved 0 og 1, handler det om hvor mange delinger av eksponent kommer frem til de verdiene. Ved 10000 tar det 14 ganger siden $2^14 = 16384$. Ved 20000 tar det 15 ganger siden $2^15 = 32768$. Men tar en til rekursiv kall 0.2 microsekunder? Tror ikke det. Det vi kan konkludere med er at ved større og større datamengde kan håndteres bare med en rekursiv kall. Dette stemmer med analysen av tidskomplekistet som reflekterer denne effekten.
+Ved metode 2 ser vi noe interessant. Vi ser en liten økning mellom 10000 og 20000. Dette kan være på grunn av hvordan håndterer rekursjon. Siden metoden deler eksponent i to og stopper rekursjonen ved 0 og 1, handler det om hvor mange delinger av eksponent kommer frem til de verdiene. Ved 10000 tar det 14 ganger siden $2^14 = 16384$. Ved 20000 tar det 15 ganger siden $2^15 = 32768$. Men tar en til rekursiv kall 0.2 microsekunder? Ja. Det vi kan konkludere med er at ved større og større datamengde kan håndteres bare med en rekursiv kall. Dette stemmer med analysen av tidskomplekistet som reflekterer denne effekten.
